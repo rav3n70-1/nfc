@@ -1,0 +1,218 @@
+@import "tailwindcss";
+
+/* ─── Design tokens ─────────────────────────────────────────── */
+:root {
+  --bg-base:        #080a0f;
+  --bg-surface:     rgba(255, 255, 255, 0.04);
+  --bg-surface-alt: rgba(255, 255, 255, 0.07);
+  --border:         rgba(255, 255, 255, 0.08);
+  --border-hover:   rgba(255, 255, 255, 0.16);
+
+  --text-primary:   #f0f2f8;
+  --text-secondary: #8892a4;
+  --text-muted:     #4a5568;
+
+  --accent:         #4f8ef7;
+  --accent-glow:    rgba(79, 142, 247, 0.25);
+  --accent-alt:     #7c6af7;
+
+  --gradient-hero:  linear-gradient(135deg, #4f8ef7 0%, #7c6af7 100%);
+  --gradient-ring:  conic-gradient(from 0deg, #4f8ef7, #7c6af7, #4f8ef7);
+
+  --radius-card:    1rem;
+  --radius-btn:     0.75rem;
+
+  --shadow-card:    0 0 0 1px var(--border), 0 4px 32px rgba(0,0,0,0.4);
+  --shadow-glow:    0 0 40px var(--accent-glow);
+}
+
+/* ─── Reset & base ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  /* iOS safe area */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+
+/* ─── Selection ─────────────────────────────────────────────── */
+::selection { background: rgba(79,142,247,0.3); color: #fff; }
+
+/* ─── Focus ring ────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── Background grid ───────────────────────────────────────── */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ─── Glassmorphism card ────────────────────────────────────── */
+.glass-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+}
+
+.glass-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 0 1px var(--border-hover);
+}
+
+/* ─── Primary button ────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--gradient-hero);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border-radius: var(--radius-btn);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(79,142,247,0.3);
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px rgba(79,142,247,0.45);
+}
+
+.btn-primary:active { transform: translateY(0); }
+
+/* ─── Secondary button ──────────────────────────────────────── */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--bg-surface-alt);
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  border-radius: var(--radius-btn);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  white-space: nowrap;
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active { transform: translateY(0); }
+
+/* ─── NFC pulse animation ───────────────────────────────────── */
+@keyframes nfc-ping {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.nfc-pulse::before,
+.nfc-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--accent);
+  animation: nfc-ping 2s cubic-bezier(0,0,0.2,1) infinite;
+}
+
+.nfc-pulse::after { animation-delay: 0.7s; }
+
+/* ─── Profile ring ──────────────────────────────────────────── */
+@keyframes ring-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.profile-ring {
+  animation: ring-spin 8s linear infinite;
+}
+
+/* ─── Gradient text ─────────────────────────────────────────── */
+.text-gradient {
+  background: var(--gradient-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Scroll reveal ─────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Ambient radial glow ───────────────────────────────────── */
+.ambient-glow {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 9999px;
+  filter: blur(100px);
+  opacity: 0.12;
+  will-change: transform;
+}
+
+/* ─── Reduce motion overrides ───────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  .profile-ring { animation: none; }
+
+  .nfc-pulse::before,
+  .nfc-pulse::after { animation: none; opacity: 0.4; }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .glass-card {
+    transition: none;
+  }
+}
